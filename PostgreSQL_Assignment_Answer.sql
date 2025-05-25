@@ -53,6 +53,22 @@ WHERE EXTRACT(YEAR FROM discovery_date) < 1800;
 
 -- problem 8
 
+CREATE OR REPLACE FUNCTION get_time_of_day(ts TIMESTAMP)
+RETURNS TEXT AS 
+$$
+BEGIN
+  IF EXTRACT(HOUR FROM ts) < 12 THEN
+    RETURN 'Morning';
+  ELSIF EXTRACT(HOUR FROM ts) BETWEEN 12 AND 17 THEN
+    RETURN 'Afternoon';
+  ELSE
+    RETURN 'Evening';
+  END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+SELECT sighting_id, get_time_of_day(sighting_time) AS time_of_day
+FROM sightings;
 
 
 
